@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+    <default>
+        <payment>
+            <paycoagregador>
+                <active>1</active>
+                <title>Paycoagregador</title>
+                <p_cust_id_cliente>P_CUST_ID_CLIENTE</p_cust_id_cliente>
+                <p_key>P_KEY</p_key>
+                <public_key>Public_KEY</public_key>
+                <url_de_respuesta>URL De Respuesta</url_de_respuesta>
+                <url_de_confirmacion>URL de confirmación</url_de_confirmacion>
+                <modo_pruebas>Modo Pruebas</modo_pruebas>
+                <tipo_de_checkout>Tipo de Checkout</tipo_de_checkout>
+                <payment_action>true</payment_action>
+                <model>Pago\Paycoagregador\Model\Paycoagregador</model>
+                <group>online</group>
+            </paycoagregador>
+            <!-- payment-config -->
+        </payment>
+    </default>
+</config>

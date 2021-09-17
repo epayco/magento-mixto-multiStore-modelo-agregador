@@ -1,0 +1,23 @@
+{
+  "name": "pago/module-paycoagregadort",
+  "description": "Module for payment provide by Payco",
+  "type": "magento2-module",
+  "license": "GPL-3.0",
+    "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Paycoagregador",
+      "email": "ricardo.saldarriaga@payco.co"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {},
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Pago\\Paycoagregador\\": ""
+    }
+  }
+}
