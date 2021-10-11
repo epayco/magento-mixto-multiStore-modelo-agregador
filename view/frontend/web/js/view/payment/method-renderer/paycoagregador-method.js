@@ -26,7 +26,7 @@ define(
             },
             redirectAfterPlaceOrder: false,
             renderCheckout: function() {
-
+                
                 var orderId = this.getOrderId();
                 var getQuoteIncrement = this.getQuoteIncrementId();
                 var totals = quote.getTotals();
@@ -79,6 +79,7 @@ define(
                         "order_id": orderId
                     },
                     success: function(data) {
+                        
                         console.log('succes');
                         if (data.increment_id) {
                             invoice = data.increment_id;
@@ -91,6 +92,7 @@ define(
                                 }
                             });
                         }
+                        
                         if(invoice){
                             if(window.checkoutConfig.payment.Paycoagregador.paycoagregador_test == "1"){
                                 window.checkoutConfig.payment.Paycoagregador.paycoagregador_test= "true";
@@ -158,7 +160,7 @@ define(
                                 //Atributos opcionales
                                 extra1: orderId,
                                 extra2: getQuoteIncrement,
-                                extra3: "extra3",
+                                extra3: "invoice "+invoice,
                                 confirmation:url.build("confirmation/paycoagregador/index"),
                                 response: url.build("confirmation/paycoagregador/index"),
                                 //Atributos cliente
@@ -169,7 +171,7 @@ define(
                                 number_doc_billing: doc
                             };
                             console.log(data)
-                            handler.open(data);
+                            //handler.open(data);
                         }
                     }
                 });

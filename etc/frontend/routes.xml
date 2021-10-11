@@ -4,7 +4,7 @@
         <route frontName="confirmation" id="confirmation">
             <module name="Pago_Paycoagregador"/>
         </route>
-        <route frontName="paycoagregador" id="paycoagregador">
+        <route frontName="response" id="response">
             <module name="Pago_Paycoagregador"/>
         </route>
     </router>

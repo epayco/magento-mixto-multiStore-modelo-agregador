@@ -4,7 +4,7 @@
 
 	use Magento\Checkout\Model\ConfigProviderInterface;
 	use Magento\ImportExport\Test\Unit\Model\Import\Entity\EavAbstractTest;
-	use Pago\Paycoagregador\Controller\PaymentController;
+	use Pago\Paycoagregador\Controller\PaymentagregadorController;
 
 	class PaycoagregadorConfigProvider implements ConfigProviderInterface {
 		/**
@@ -14,7 +14,7 @@
 		public function __construct(
 			\Magento\Framework\App\Helper\Context $context,
 			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-			PaymentController $paycoagregador,
+			PaymentagregadorController $paycoagregador,
 			\Magento\Store\Api\Data\StoreInterface $store
 		)
 		{
@@ -39,7 +39,7 @@
 						'vertical_cs'=> $this->_scopeConfig->getValue('payment/paycoagregador/vertical_cs',$storeScope),
 						'responseAction'=>$this->paycoagregador->responseActionPayment(),
 						'getOrderId'=>$this->paycoagregador->getOrderIdData(),
-                  'getQuoteIncrementId'=>$this->paycoagregador->getQuoteIncrementId(),
+                  		'getQuoteIncrementId'=>$this->paycoagregador->getQuoteIncrementId(),
 						'language'=>$this->getLanguage()
 					]
 				]

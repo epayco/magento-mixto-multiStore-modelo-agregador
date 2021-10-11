@@ -53,7 +53,7 @@
 			\Magento\Framework\HTTP\Client\Curl $curl,
 			\Magento\Framework\App\Helper\Context $contextApp,
 			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-			\Pago\Paycoagregador\Controller\PaymentController $payment_controller,
+			\Pago\Paycoagregador\Controller\PaymentagregadorController $payment_controller,
 			\Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
 			\Magento\Quote\Model\QuoteFactory $quoteFactory
 		) {
