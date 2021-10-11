@@ -171,7 +171,7 @@ define(
                                 number_doc_billing: doc
                             };
                             console.log(data)
-                            //handler.open(data);
+                            handler.open(data);
                         }
                     }
                 });
