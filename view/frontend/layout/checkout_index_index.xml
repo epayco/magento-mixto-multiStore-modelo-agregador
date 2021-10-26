@@ -22,11 +22,10 @@
                                                         <item name="renders" xsi:type="array">
                                                             <item name="children" xsi:type="array">
                                                             <!-- merge payment method renders here -->
-                                                                <item name="paycoagregador-paycoagregador" xsi:type="array">
-                                                                    <item name="component" xsi:type="string">Pago_Paycoagregador/js/view/payment/paycoagregador</item>
+                                                                <item name="pago-paycoagregador" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Pago_Paycoagregador/js/view/payment/epaycoagregador</item>
                                                                     <item name="methods" xsi:type="array">
-
-																		 <item name="paycoagregador" xsi:type="array">
+																		<item name="epaycoagregador" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                     </item>

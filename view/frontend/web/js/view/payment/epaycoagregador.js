@@ -16,8 +16,8 @@ define(
         'use strict';
         rendererList.push(
             {
-                type: 'paycoagregador',
-                component: 'Pago_Paycoagregador/js/view/payment/method-renderer/paycoagregador-method'
+                type: 'epaycoagregador',
+                component: 'Pago_Paycoagregador/js/view/payment/method-renderer/epaycoagregador-method'
             }
         );
         /** Add view logic here if needed */

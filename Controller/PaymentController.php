@@ -1,33 +1,32 @@
 <?php
 
-	namespace Pago\Paycoagregador\Controller;
+namespace Pago\Paycoagregador\Controller;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 class PaymentController extends \Magento\Framework\App\Action\Action {
 
+protected $orderRepository;
+
 public function __construct(
 	\Magento\Framework\App\Action\Context $context,
-
 	\Magento\Checkout\Model\Session $checkoutSession,
 	\Magento\Sales\Model\OrderFactory $orderFactory,
 	\Magento\Quote\Model\QuoteManagement $quote_management,
-	\Magento\Checkout\Model\Cart $cart
+	\Magento\Checkout\Model\Cart $cart,
+    \Magento\Sales\Model\Order $order
 ) {
 
 	$this->checkoutSession = $checkoutSession;
 	$this->orderFactory = $orderFactory;
 	$this->quoteManagement = $quote_management;
 	$this->cart = $cart;
-
+    $this->order = $order;
 	parent::__construct($context);
 }
 
-
-
 	public function execute(){}
 
-
-
-	public function responseActionPayment($control = false)
+	public function responseAction($control = false)
 	{
 		if(!$control){
 			return true;
@@ -75,9 +74,10 @@ public function __construct(
 				}
 			}
 			exit;
-		}
 
-	}
+
+		}
+    }
 
 	public function confirmAction()
 	{
@@ -126,14 +126,13 @@ public function __construct(
 
 	}
 
-    public function getQuoteIncrementId(){
-		  $this->checkoutSession->getQuote()->reserveOrderId(); 
-		  $quoteReservedOrderId = $this->getOrderData();
+        public function getQuoteIncrementId(){
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+		    $last_order_increment_id = $objectManager->create('\Magento\Sales\Model\Order')->getCollection()->getLastItem()->getIncrementId();
+		    return $last_order_increment_id+1;
+        }
 
-		  return $quoteReservedOrderId;
-    }
-
-    public function getOrderIncrementId(){
+	public function getOrderIncrementId(){
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
         $connection = $resource->getConnection();
@@ -143,7 +142,7 @@ public function __construct(
             $sql = "SELECT * FROM quote WHERE entity_id = '$orderId_'";
             $result = $connection->fetchAll($sql);
             if($result != null){
-                return $result[0];
+                return $result;
             }else{
                 return 1;
             }
@@ -153,15 +152,24 @@ public function __construct(
         }
     }
 
-    public function getOrderData(){
-        $orderId = $this->checkoutSession->getQuote()->getReservedOrderId();
-        return $orderId;
+	public function getQuoteData(){
+		$orderId=$this->checkoutSession->getQuote()->getData();
+		return $orderId;
     }
 
-	public function getOrderIdData(){
+        public function getStoreData(){
+            $orderId=$this->checkoutSession->getQuote()->getStoredData();
+            return $orderId;
+        }
+
+	public function getOrderId(){
 		$carrito = $this->checkoutSession->getQuote()->getId();
 		return $carrito;
-
 	}
+
+        public function getQuoteIdData(){
+            $order = $this->checkoutSession->getQuoteId();
+            return $order;
+        }
 
 }

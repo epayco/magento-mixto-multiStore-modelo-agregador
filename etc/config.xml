@@ -5,12 +5,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <payment>
-            <paycoagregador>
+            <epaycoagregador>
                 <active>1</active>
-                <title>Paycoagregador</title>
+                <model>Pago\Paycoagregador\Model\Epaycoagregador</model>
+                <order_status>pending</order_status>
+                <title>ePayco agregador</title>
                 <p_cust_id_cliente>P_CUST_ID_CLIENTE</p_cust_id_cliente>
                 <p_key>P_KEY</p_key>
                 <public_key>Public_KEY</public_key>
@@ -18,11 +20,9 @@
                 <url_de_confirmacion>URL de confirmación</url_de_confirmacion>
                 <modo_pruebas>Modo Pruebas</modo_pruebas>
                 <tipo_de_checkout>Tipo de Checkout</tipo_de_checkout>
-                <payment_action>true</payment_action>
-                <model>Pago\Paycoagregador\Model\Paycoagregador</model>
-                <group>online</group>
-            </paycoagregador>
-            <!-- payment-config -->
+                <allowspecific>0</allowspecific>
+                <group>epaycoagregador_payment</group>
+            </epaycoagregador>
         </payment>
     </default>
 </config>

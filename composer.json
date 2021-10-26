@@ -1,13 +1,12 @@
 {
-  "name": "pago/module-paycoagregadort",
-  "description": "Module for payment provide by Payco",
+  "name": "epayco/module-epaycopayment",
+  "description": "Module for payment provide by ePayco",
   "type": "magento2-module",
   "license": "GPL-3.0",
-    "version": "1.0.0",
   "authors": [
     {
-      "name": "Paycoagregador",
-      "email": "ricardo.saldarriaga@payco.co"
+      "name": "ePayco",
+      "email": "david.marulanda@payco.co"
     }
   ],
   "minimum-stability": "dev",
@@ -17,7 +16,7 @@
       "registration.php"
     ],
     "psr-4": {
-      "Pago\\Paycoagregador\\": ""
+      "PagoEpayco\\Payco\\": ""
     }
   }
 }

@@ -13,5 +13,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Se sube la primera versión del plugin de magento
 
-[Unreleased]: https://github.com/epayco/magento-mixto-multiStore-modelo-agregador/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/epayco/magento-mixto-multiStore-modelo-agregador/releases/tag/v1.0.0
+[Unreleased]: https://github.com/epayco/plugin_magento_multistore/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/epayco/plugin_magento_multistore/releases/tag/v1.0.0

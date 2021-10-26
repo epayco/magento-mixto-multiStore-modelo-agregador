@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Pago\\Paycoagregador\\' => array($baseDir . '/'),
+    'PagoEpayco\\Payco\\' => array($baseDir . '/'),
 );

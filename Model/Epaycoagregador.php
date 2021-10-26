@@ -8,14 +8,15 @@ namespace Pago\Paycoagregador\Model;
 /**
  * Pay In Store payment method model
  */
-class Paycoagregador extends \Magento\Payment\Model\Method\AbstractMethod
+class Epaycoagregador extends \Magento\Payment\Model\Method\AbstractMethod
 {
+
     /**
      * Payment code
      *
      * @var string
      */
-    protected $_code = 'paycoagregador';
+    protected $_code = 'epaycoagregador';
 
     /**
      * Availability option
@@ -28,5 +29,11 @@ class Paycoagregador extends \Magento\Payment\Model\Method\AbstractMethod
 	) {
 		return parent::isAvailable($quote);
 	}
+
+
+
+
+
+
 
 }

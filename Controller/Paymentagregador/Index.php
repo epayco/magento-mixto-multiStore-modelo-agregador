@@ -1,10 +1,25 @@
 <?php
-
+/**
+ * Module for payment provide by ePayco
+ * Copyright (C) 2017
+ *
+ * This file is part of EPayco/EPaycoPayment.
+ *
+ * EPayco/EPaycoPayment is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 namespace Pago\Paycoagregador\Controller\Paymentagregador;
-use Magento\Framework\App\CsrfAwareActionInterface;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Sales\Model\Order;
 
 class Index extends \Magento\Framework\App\Action\Action
@@ -35,9 +50,8 @@ class Index extends \Magento\Framework\App\Action\Action
         \Magento\Framework\HTTP\Client\Curl $curl,
         \Magento\Framework\App\Helper\Context $contextApp,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Pago\Paycoagregador\Controller\PaymentagregadorController $payment_controller,
+        \Pago\Paycoagregador\Controller\PaymentController $payment_controller,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
@@ -60,25 +74,24 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-
         $result = $this->resultJsonFactory->create();
-        $data = $_REQUEST;
-       
-        if(isset($_REQUEST['order_id'])){
+        $orderId = $_REQUEST['order_id'];
+
+        if(isset($orderId)){
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
             $connection = $resource->getConnection();
-            $orderId_= $_REQUEST['order_id'];
-            $sql = "SELECT * FROM sales_order WHERE quote_id = '$orderId_'";
-            $result_ = $connection->fetchAll($sql);
-            if($result_ != null){
-                return $result->setData($result_[0]);
-            }else{
-                return $result->setData('No se creo la orden ' );
-            }
+            $orderId_= $orderId;
+                $sql = "SELECT * FROM sales_order WHERE quote_id = '$orderId_'";
+                $result_ = $connection->fetchAll($sql);
+                if($result_ != null){
+                    return $result->setData($result_[0]);
+                }else{
+                    return $result->setData('warning' );
+                }
 
         } else {
-            return $result->setData('orden no enviada');
+                return $result->setData('error');
         }
 
     }
