@@ -15,3 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [Unreleased]: https://github.com/epayco/plugin_magento_multistore/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/epayco/plugin_magento_multistore/releases/tag/v1.0.0
+
+## [2.3.4] - 2021-10-08
+
+### Versión 2.3.4
+
+- Se sube la versión 2.3.4 del plugin de magento2
