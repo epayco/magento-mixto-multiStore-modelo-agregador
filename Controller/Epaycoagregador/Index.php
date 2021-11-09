@@ -197,7 +197,7 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
                     return $result->setData('Error No se creo la orden');
                 }
 
-                return $result->setData('confirmed order');;
+                return $result->setData('confirmed order');
             }
             else{
                 return $result->setData('no entro a la signature');
