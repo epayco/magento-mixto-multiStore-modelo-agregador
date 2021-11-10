@@ -11,14 +11,14 @@ class ComposerStaticInit20f78dd566b4a8ee094bb1cc1b0ae9eb
     );
 
     public static $prefixLengthsPsr4 = array (
-        'P' =>
+        'P' => 
         array (
-            'Pago\\Paycoagregador\\' => 17,
+            'PagoEpayco\\Payco\\' => 17,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Pago\\Paycoagregador\\' =>
+        'PagoEpayco\\Payco\\' => 
         array (
             0 => __DIR__ . '/../..' . '/',
         ),
