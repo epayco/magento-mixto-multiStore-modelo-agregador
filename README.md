@@ -5,7 +5,7 @@ Este plugin permite integrar ePayco como medio de pago para sus diferentes tiend
 **Si usted tiene alguna pregunta o problema, no dude en ponerse en contacto con nuestro soporte técnico: desarrollo@payco.co.**
 
 ## Versiones
-* [ePayco plugin Magento multi tienda v2.3.x](https://github.com/epayco/plugin_magento_multistore.git).
+* [ePayco plugin Magento multi tienda v2.3.x](https://github.com/epayco/magento-mixto-multiStore-modelo-agregador.git).
 
 
 ## Iniciando
@@ -23,16 +23,16 @@ Necesita tener instalado Magento 2 con todas sus dependencias y una cuenta en eP
 1- Clonar el repositorio en su máquina.
 
 ```
-git clone https://github.com/epayco/plugin_magento_multistore.git
+git clone https://github.com/epayco/magento-mixto-multiStore-modelo-agregador.git
 ```
-2- Ingresar a la carpeta creada y copiar el contenido en su instalacion en magento en la ruta ruta/de/su/instalacion/app/code/
+2- Renombrar la carpeta creada como "Paycoagregador" y copiar el contenido de su instalacion en magento en la ruta: ruta/de/su/instalacion/app/code/Pago/
 ```
 cd magento2
-cp . -R /ruta/de/su/instalacion/app/code/
+cp . -R /ruta/de/su/instalacion/app/code/Pago/
 ```
 3- Dirigirse a la ruta de instalación de su magento 2 y ejecutar los siguientes comandos
 ```
-php bin/magento module:enable PagoEpayco_Payco
+php bin/magento module:enable Pago_Paycoagregador
 php bin/magento setup:upgrade
 php bin/magento setup:di:compile
 ```
