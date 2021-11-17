@@ -21,3 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### versión 2.3.0
 
 - Se realiza actualización respectiva en el modulo para la versión 2.3.0
+
+## [2.3.1] - 2021-11-11
+- fix: Se implementa variables correctas correspondientes al metodo de pago.

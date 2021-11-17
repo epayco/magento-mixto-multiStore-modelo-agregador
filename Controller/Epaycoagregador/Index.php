@@ -95,7 +95,7 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
         $new_url = $server_name;
         $result = $this->resultJsonFactory->create();
         $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
-        $urlRedirect = $this->scopeConfig->getValue('payment/epayco/payco_callback',$storeScope);
+        $urlRedirect = trim($this->scopeConfig->getValue('payment/epaycoagregador/payco_callback',$storeScope));
         $pendingOrderState = "pending";
 
         if(isset($_GET['ref_payco'])){
@@ -160,8 +160,8 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
             $x_extra1 = trim($_REQUEST['x_extra1']);
             $x_currency_code = trim($_REQUEST['x_currency_code']);
             $x_transaction_id = trim($_REQUEST['x_transaction_id']);
-            $p_cust_id_cliente = $this->scopeConfig->getValue('payment/epayco/payco_merchant',$storeScope);
-            $p_key = $this->scopeConfig->getValue('payment/epayco/payco_key',$storeScope);
+            $p_cust_id_cliente = trim($this->scopeConfig->getValue('payment/epaycoagregador/payco_merchant',$storeScope));
+            $p_key = trim($this->scopeConfig->getValue('payment/epaycoagregador/payco_key',$storeScope));
             $signature  = hash('sha256', $p_cust_id_cliente . '^' . $p_key . '^' . $x_ref_payco . '^' . $x_transaction_id . '^' . $x_amount . '^' . $x_currency_code);
 
             if($x_signature == $signature){
