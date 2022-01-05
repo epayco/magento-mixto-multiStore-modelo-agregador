@@ -26,7 +26,10 @@ define(
             },
             redirectAfterPlaceOrder: false,
             renderCheckout: async function() {
-
+                var button0 = document.getElementsByClassName('action primary checkout')[0];
+                var button1 = document.getElementsByClassName('action primary checkout')[1];
+                button0.disabled = true;
+                button1.disabled = true;
                 var countryBllg = quote.shippingAddress();
                 var customerData = checkoutData.getShippingAddressFromData();
                 var paymentData = {
@@ -159,8 +162,6 @@ define(
                                //Atributos opcionales
                                extra1: orderId,
                                extra2: invoice,
-                               //extra3: getQuoteIncrement,
-                               //extra4: quoteIdData,
                                confirmation:url.build("confirmationAgregador/epaycoagregador/index"),
                                response: url.build("confirmationAgregador/epaycoagregador/index"),
                                //Atributos cliente
@@ -170,6 +171,8 @@ define(
                                mobilephone_billing: mobile,
                                number_doc_billing: doc
                            };
+                           button0.disabled = false;
+                           button1.disabled = false;
                            handler.open(data);
                        }
                     },
