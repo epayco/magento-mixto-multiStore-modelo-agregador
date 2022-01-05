@@ -96,7 +96,15 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
         $result = $this->resultJsonFactory->create();
         $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
         $urlRedirect = trim($this->scopeConfig->getValue('payment/epaycoagregador/payco_callback',$storeScope));
+        if($urlRedirect != ''){
+            if(isset($_GET['ref_payco'])){
+                $urlRedirect = $urlRedirect."?ref_payco=".$_GET['ref_payco'];
+            }
+        }
         $pendingOrderState = "pending";
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
+        $connection = $resource->getConnection();
 
         if(isset($_GET['ref_payco'])){
             $ref_payco = $_GET['ref_payco'];
@@ -106,14 +114,15 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
             $dataTransaction = json_decode($response);
 
             if(isset($dataTransaction) && isset($dataTransaction->success) && $dataTransaction->success){
-                $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
                 $orderId = (Integer)$dataTransaction->data->x_extra1;
                 $code = $dataTransaction->data->x_cod_response;
                 $order = $objectManager->create('\Magento\Sales\Model\Order')->loadByAttribute('quote_id',$orderId);
 
                 if($code == 1){
-                    $order->setState(Order::STATE_PROCESSING, true);
-                    $order->setStatus(Order::STATE_PROCESSING, true);
+                    if($order->getState() != "canceled"  ){
+                        $order->setState(Order::STATE_PROCESSING, true);
+                        $order->setStatus(Order::STATE_PROCESSING, true);
+                    }
                 } else if($code == 3){
                     $order->setState($pendingOrderState, true);
                     $order->setStatus($pendingOrderState, true);
@@ -124,9 +133,15 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
                     $code == 10 ||
                     $code == 11
                 ){
+                    if($order->getState() == "pending" || $order->getState() == "new" ){
+                        $this->uploadInventory($orderId);
+                    }
                     $order->setState(Order::STATE_CANCELED, true);
                     $order->setStatus(Order::STATE_CANCELED, true);
                 } else if($code == 12)  {
+                    if($order->getState() == "pending" || $order->getState() == "new" ){
+                        $this->uploadInventory($orderId);
+                    }
                     $order->setState(Order::STATUS_FRAUD, true);
                     $order->setStatus(Order::STATUS_FRAUD, true);
                 }
@@ -163,17 +178,45 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
             $p_cust_id_cliente = trim($this->scopeConfig->getValue('payment/epaycoagregador/payco_merchant',$storeScope));
             $p_key = trim($this->scopeConfig->getValue('payment/epaycoagregador/payco_key',$storeScope));
             $signature  = hash('sha256', $p_cust_id_cliente . '^' . $p_key . '^' . $x_ref_payco . '^' . $x_transaction_id . '^' . $x_amount . '^' . $x_currency_code);
+            $orderId = (Integer)$x_extra1;
+            $order = $objectManager->create('Magento\Sales\Model\Order')->loadByAttribute('quote_id',$orderId);
+            $x_test_request = trim($_REQUEST['x_test_request']);
+            $isTestTransaction = $x_test_request == 'TRUE' ? "yes" : "no";
+            $isTestMode = $isTestTransaction == "yes" ? "true" : "false";
 
-            if($x_signature == $signature){
-                $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            if(trim($this->scopeConfig->getValue('payment/epaycoagregador/payco_test',$storeScope)) == "1"){
+                $isTestPluginMode = "yes";
+            }else{
+                $isTestPluginMode = "no"; 
+            }
+
+            if(floatval($order->getData()['base_grand_total'])==floatval($x_amount)){
+                if("yes" == $isTestPluginMode){
+                    $validation = true;
+                }
+                if("no" == $isTestPluginMode ){
+                    if($x_approval_code != "000000" && $x_cod_transaction_state == 1){
+                        $validation = true;
+                    }else{
+                        if($x_cod_transaction_state != 1){
+                            $validation = true;
+                        }else{
+                            $validation = false;
+                        }
+                    }
+                    
+                }
+            }
+
+            if($x_signature == $signature && $validation){
                 $x_cod_transaction_state =trim($_REQUEST['x_cod_transaction_state']);
                 $code = (Integer)$x_cod_transaction_state;
-                $orderId = (Integer)$x_extra1;
-                $order = $objectManager->create('Magento\Sales\Model\Order')->loadByAttribute('quote_id',$orderId);
 
                 if($code == 1){
-                    $order->setState(Order::STATE_PROCESSING, true);
-                    $order->setStatus(Order::STATE_PROCESSING, true);
+                    if($order->getState() != "canceled"  ){
+                        $order->setState(Order::STATE_PROCESSING, true);
+                        $order->setStatus(Order::STATE_PROCESSING, true);
+                    }
                 } else if($code == 3){
                     $order->setState($pendingOrderState, true);
                     $order->setStatus($pendingOrderState, true);
@@ -184,9 +227,15 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
                         $code == 10 ||
                         $code == 11
                 ){
+                    if($order->getState() == "pending" || $order->getState() == "new" ){
+                        $this->uploadInventory($orderId);
+                    }
                     $order->setState(Order::STATE_CANCELED, true);
                     $order->setStatus(Order::STATE_CANCELED, true);
                 } else if($code == 12)  {
+                    if($order->getState() == "pending" || $order->getState() == "new" ){
+                        $this->uploadInventory($orderId);
+                    }
                     $order->setState(Order::STATUS_FRAUD, true);
                     $order->setStatus(Order::STATUS_FRAUD, true);
                 }
@@ -194,16 +243,42 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
                 try{
                     $order->save();
                 } catch(\Exception $e){
-                    return $result->setData('Error No se creo la orden');
+                    return $result->setData(['Error No se creo la orden']);
                 }
 
-                return $result->setData('confirmed order');
+                return $result->setData(['confirmed order']);
             }
             else{
-                return $result->setData('no entro a la signature');
+                $this->uploadInventory($orderId);
+                return $result->setData(['no entro a la signature']);
             }
         } else {
-            return $result->setData('No se creo la orden');
+            return $result->setData(['No se creo la orden']);
+        }
+    }
+
+    public function uploadInventory($orderId){
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
+        $connection = $resource->getConnection();
+        $order = $objectManager->create('\Magento\Sales\Model\Order')->loadByAttribute('quote_id',$orderId);
+        $sql = "SELECT sku FROM quote_item WHERE quote_id = '$orderId'";
+        $result = $connection->fetchAll($sql);
+        if($result != null){
+            foreach($result as $sku){
+                $sku  = $sku["sku"];
+                $sql_ = "SELECT MAX(reservation_id),sku,quantity FROM inventory_reservation WHERE sku = '$sku' ORDER BY reservation_id ASC";  
+                $query = $connection->fetchAll($sql_);
+                if($query != null){
+                    foreach($query as $productInventory){
+                        $queryUpload = $connection->update(
+                            'inventory_reservation',
+                            ['quantity' => '0.0000'],
+                            ['reservation_id = ?' => $productInventory["MAX(reservation_id)"]]
+                        );
+                    }
+                }
+            }
         }
     }
 
