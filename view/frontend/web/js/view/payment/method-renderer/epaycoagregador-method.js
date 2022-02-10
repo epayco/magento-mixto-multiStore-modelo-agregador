@@ -15,7 +15,7 @@ define(
         'Magento_Checkout/js/model/url-builder',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/place-order',
-        'https://checkout.epayco.co/checkout.js?version=1629309251348'
+        'https://epayco-checkout-testing.s3.amazonaws.com/checkout.preprod.js?version=1643645084821'
     ],
     function ($,Component,url,quote,checkoutData,messageContainer, urlBuilder, customer, placeOrderService) {
         'use strict';
@@ -28,6 +28,8 @@ define(
             renderCheckout: async function() {
                 var button0 = document.getElementsByClassName('action primary checkout')[0];
                 var button1 = document.getElementsByClassName('action primary checkout')[1];
+                button0.style.disabled = true;
+                button1.style.disabled = true;
                 button0.disabled = true;
                 button1.disabled = true;
                 var countryBllg = quote.shippingAddress();
@@ -173,6 +175,8 @@ define(
                            };
                            button0.disabled = false;
                            button1.disabled = false;
+                           button0.style.disabled = false;
+                           button1.style.disabled = false;
                            handler.open(data);
                        }
                     },
