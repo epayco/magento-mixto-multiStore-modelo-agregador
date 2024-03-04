@@ -6,6 +6,7 @@ Este plugin permite integrar ePayco como medio de pago para sus diferentes tiend
 
 ## Versiones
 * [ePayco plugin Magento multi tienda v2.3.x](https://github.com/epayco/magento-mixto-multiStore-modelo-agregador.git).
+* [ePayco plugin Magento multi tienda v2.4.0](https://github.com/epayco/magento-mixto-multiStore-modelo-agregador/releases/tag/2.4.0).
 
 
 ## Iniciando

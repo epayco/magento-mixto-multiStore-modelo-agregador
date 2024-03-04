@@ -16,6 +16,7 @@
                 <p_cust_id_cliente>P_CUST_ID_CLIENTE</p_cust_id_cliente>
                 <p_key>P_KEY</p_key>
                 <public_key>Public_KEY</public_key>
+                <private_key>Private_KEY</private_key>
                 <url_de_respuesta>URL De Respuesta</url_de_respuesta>
                 <url_de_confirmacion>URL de confirmación</url_de_confirmacion>
                 <modo_pruebas>Modo Pruebas</modo_pruebas>
