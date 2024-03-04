@@ -178,7 +178,6 @@ define(
                                test: test2.toString(),
                                extras_epayco:{extra5:"p29"}
                            };
-
                            button0.disabled = false;
                            button1.disabled = false;
                            button0.style.disabled = false;
@@ -200,7 +199,6 @@ define(
                        }
                     },
                     error :function(error){
-
                         console.log('error: '+error);
                     }
                 });
@@ -255,7 +253,6 @@ define(
                 }
                 payment()
                     .then(session => {
-
                         if(session.data.sessionId != undefined){
                             localStorage.removeItem("sessionPaymentAgregador");
                             localStorage.setItem("sessionPaymentAgregador", session.data.sessionId);
