@@ -176,7 +176,7 @@ define(
                                autoclick: "true",
                                ip: ip,
                                test: test2.toString(),
-                               extras_epayco:{extra5:"p29"}
+                               extras_epayco:{extra5:"P29"}
                            };
                            button0.disabled = false;
                            button1.disabled = false;
