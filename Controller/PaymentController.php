@@ -126,11 +126,11 @@ public function __construct(
 
 	}
 
-        public function getQuoteIncrementId(){
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-		    $last_order_increment_id = $objectManager->create('\Magento\Sales\Model\Order')->getCollection()->getLastItem()->getIncrementId();
-		    return $last_order_increment_id+1;
-        }
+	public function getQuoteIncrementId(){
+		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+		$last_order_increment_id = $objectManager->create('\Magento\Sales\Model\Order')->getCollection()->getLastItem()->getIncrementId();
+		return $last_order_increment_id+1;
+	}
 
 	public function getOrderIncrementId(){
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
@@ -157,19 +157,40 @@ public function __construct(
 		return $orderId;
     }
 
-        public function getStoreData(){
-            $orderId=$this->checkoutSession->getQuote()->getStoredData();
-            return $orderId;
-        }
+	public function getStoreData(){
+		$orderId=$this->checkoutSession->getQuote()->getStoredData();
+		return $orderId;
+	}
 
 	public function getOrderId(){
 		$carrito = $this->checkoutSession->getQuote()->getId();
 		return $carrito;
 	}
 
-        public function getQuoteIdData(){
-            $order = $this->checkoutSession->getQuoteId();
-            return $order;
-        }
+	public function getQuoteIdData(){
+		$order = $this->checkoutSession->getQuoteId();
+		return $order;
+	}
+
+	public function getCustomerIp(){
+        $ipaddress = '';
+        if (isset($_SERVER['HTTP_CLIENT_IP']))
+            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+        else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        else if(isset($_SERVER['HTTP_X_FORWARDED']))
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+        else if(isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']))
+            $ipaddress = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+        else if(isset($_SERVER['HTTP_FORWARDED_FOR']))
+            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        else if(isset($_SERVER['HTTP_FORWARDED']))
+            $ipaddress = $_SERVER['HTTP_FORWARDED'];
+        else if(isset($_SERVER['REMOTE_ADDR']))
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        else
+            $ipaddress = 'UNKNOWN';
+        return $ipaddress;
+    }
 
 }
