@@ -31,6 +31,10 @@
                     <label>Public_KEY</label>
                     <comment>LLave para autenticar y consumir los servicios de ePayco, Proporcionado en su panel de clientes en la opción configuración.</comment>
                 </field>
+                <field id="payco_private_key" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Private_KEY</label>
+                    <comment>LLave para autenticar y consumir los servicios de ePayco, Proporcionado en su panel de clientes en la opción configuración.</comment>
+                </field>
                 <field id="payco_callback" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>URL De Respuesta</label>
                     <comment>Url de respuesta para confirmar los pagos desde ePayco.</comment>

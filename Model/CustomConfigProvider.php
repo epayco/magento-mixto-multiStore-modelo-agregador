@@ -45,6 +45,7 @@
 						'payco_merchant'=> $this->_scopeConfig->getValue('payment/epaycoagregador/payco_merchant',$storeScope),
 						'payco_key'=> $this->_scopeConfig->getValue('payment/epayco/epaycoagregador',$storeScope),
 						'payco_public_key'=> $this->_scopeConfig->getValue('payment/epaycoagregador/payco_public_key',$storeScope),
+						'payco_private_key'=> $this->_scopeConfig->getValue('payment/epaycoagregador/payco_private_key',$storeScope),
 						'payco_callback'=> $this->_scopeConfig->getValue('payment/epaycoagregador/payco_callback',$storeScope),
 
 						'payco_test'=> $this->_scopeConfig->getValue('payment/epaycoagregador/payco_test',$storeScope),
@@ -56,6 +57,7 @@
                         'getOrderIncrementId'=>$this->epayco->getOrderIncrementId(),
                         'getQuoteIncrementId'=>$this->epayco->getQuoteIncrementId(),
                         'getQuoteIdData'=>$this->epayco->getQuoteIdData(),
+						'getCustomerIp'=>$this->epayco->getCustomerIp(),
 						'language'=>$this->getLanguage()
 					]
 				]

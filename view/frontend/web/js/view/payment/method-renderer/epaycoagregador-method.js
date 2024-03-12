@@ -15,7 +15,7 @@ define(
         'Magento_Checkout/js/model/url-builder',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/place-order',
-        'https://checkout.epayco.co/checkout.js?version=1629309251348'
+        'https://checkout.epayco.co/checkout.js'
     ],
     function ($,Component,url,quote,checkoutData,messageContainer, urlBuilder, customer, placeOrderService) {
         'use strict';
@@ -26,7 +26,12 @@ define(
             },
             redirectAfterPlaceOrder: false,
             renderCheckout: async function() {
-
+                var button0 = document.getElementsByClassName('action primary checkout')[0];
+                var button1 = document.getElementsByClassName('action primary checkout')[1];
+                button0.style.disabled = true;
+                button1.style.disabled = true;
+                button0.disabled = true;
+                button1.disabled = true;
                 var countryBllg = quote.shippingAddress();
                 var customerData = checkoutData.getShippingAddressFromData();
                 var paymentData = {
@@ -52,7 +57,10 @@ define(
                 var getQuoteIncrement = this.getQuoteIncrementId();
                 var totals = quote.getTotals();
                 var quoteIdData = this.getQuoteIdData();
+                var ip =  this.getCustomerIp();
+                var _this = await this;
                 var invoice;
+
                 var settings = {
                     "url": url.build("responseAgregador/paymentagregador/index"),
                     "method": "POST",
@@ -102,9 +110,6 @@ define(
                                key: window.checkoutConfig.payment.epaycoagregador.payco_public_key,
                                test:test2
                            })
-                           var taxes = 0;
-                           taxes = totals._latestValue.base_tax_amount
-                           taxes = ''+taxes;
                            var items = '';
                            for(var i = 0; i <  window.checkoutConfig.quoteItemData.length; i++){
                                if(window.checkoutConfig.totalsData.items.length==1){
@@ -118,10 +123,6 @@ define(
                            var mobile = '';
                            var doc= '';
                            var country = '';
-                           //calcular base iva
-                           var tax_base = 0;
-                           tax_base = totals._latestValue.base_subtotal_with_discount;
-                           tax_base = ''+tax_base;
                            // fin calcular base iva
                            if(!window.checkoutConfig.isCustomerLoggedIn){
                                if(customerData){
@@ -140,18 +141,23 @@ define(
                            var lang = '';
                            var temp = window.checkoutConfig.payment.epaycoagregador.language.split("_");
                            lang = temp[0];
-                           var amount = '';
-                           amount = totals._latestValue.base_grand_total;
 
+                           var amount = 0;
+                           amount = totals._latestValue.base_grand_total;
+                           var taxes = 0;
+                           taxes = totals._latestValue.base_tax_amount;
+                           var tax_base = 0;
+                           tax_base = amount - taxes;
+                           parseFloat(tax_base);
                            var data={
                                //Parametros compra (obligatorio)
                                name: items,
                                description: items,
                                invoice: invoice,
                                currency: window.checkoutConfig.quoteData.store_currency_code,
-                               amount: amount,
-                               tax_base: tax_base.replace('.',','),
-                               tax: taxes.replace('.',','),
+                               amount: amount.toString(),
+                               tax_base: tax_base.toString(),
+                               tax: taxes.toString(),
                                country: country,
                                lang: lang,
                                //Onpage='false' - Standard='true'
@@ -159,8 +165,6 @@ define(
                                //Atributos opcionales
                                extra1: orderId,
                                extra2: invoice,
-                               //extra3: getQuoteIncrement,
-                               //extra4: quoteIdData,
                                confirmation:url.build("confirmationAgregador/epaycoagregador/index"),
                                response: url.build("confirmationAgregador/epaycoagregador/index"),
                                //Atributos cliente
@@ -168,13 +172,33 @@ define(
                                address_billing: address_billing,
                                type_doc_billing: docType,
                                mobilephone_billing: mobile,
-                               number_doc_billing: doc
+                               number_doc_billing: doc,
+                               autoclick: "true",
+                               ip: ip,
+                               test: test2.toString(),
+                               extras_epayco:{extra5:"P29"}
                            };
-                           handler.open(data);
+                           button0.disabled = false;
+                           button1.disabled = false;
+                           button0.style.disabled = false;
+                           button1.style.disabled = false;
+                            const apiKey = window.checkoutConfig.payment.epaycoagregador.payco_public_key;
+                            const privateKey = window.checkoutConfig.payment.epaycoagregador.payco_private_key;
+                            if(localStorage.getItem("invoicePaymentAgregador") == null){
+                                localStorage.setItem("invoicePaymentAgregador", invoice);
+                                _this.makePayment(privateKey,apiKey,data, data.external == 'true'?true:false)
+                            }else{
+                                if(localStorage.getItem("invoicePaymentAgregador") != invoice){
+                                    localStorage.removeItem("invoicePaymentAgregador");
+                                    localStorage.setItem("invoicePaymentAgregador", invoice);
+                                    _this.makePayment(privateKey,apiKey,data, data.external == 'true'?true:false)
+                                }else{
+                                    _this.makePayment(privateKey,apiKey,data, data.external == 'true'?true:false)
+                                }
+                            }
                        }
                     },
                     error :function(error){
-
                         console.log('error: '+error);
                     }
                 });
@@ -210,6 +234,40 @@ define(
             responseAction: function(){
                 return window.checkoutConfig.payment.epaycoagregador.responseAction;
             },
+            getCustomerIp: function(){
+                return window.checkoutConfig.payment.epaycoagregador.getCustomerIp;
+            },
+            makePayment:  function (privatekey, apikey, info, external) {
+
+                const headers = { 'Content-Type': 'application/json' } ;
+                headers['privatekey'] = privatekey;
+                headers['apikey'] = apikey;
+                var payment =   function (){
+                    return  fetch("https://cms.epayco.co/checkout/payment/session", {
+                        method: 'POST',
+                        body: JSON.stringify(info),
+                        headers
+                    })
+                        .then(res =>  res.json())
+                        .catch(err => err);
+                }
+                payment()
+                    .then(session => {
+                        if(session.data.sessionId != undefined){
+                            localStorage.removeItem("sessionPaymentAgregador");
+                            localStorage.setItem("sessionPaymentAgregador", session.data.sessionId);
+                            const handlerNew = window.ePayco.checkout.configure({
+                                sessionId: session.data.sessionId,
+                                external: external,
+                            });
+                            handlerNew.openNew()
+                        }
+                    })
+                    .catch(error => {
+                        debugger
+                        error.message;
+                    });
+            }
         });
     }
 );
