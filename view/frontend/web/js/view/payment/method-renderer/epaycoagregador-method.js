@@ -15,7 +15,7 @@ define(
         'Magento_Checkout/js/model/url-builder',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/place-order',
-        'https://epayco-checkout-testing.s3.amazonaws.com/checkout.preprod.js'
+        'https://checkout.epayco.co/checkout.js'
     ],
     function ($,Component,url,quote,checkoutData,messageContainer, urlBuilder, customer, placeOrderService) {
         'use strict';
@@ -243,7 +243,7 @@ define(
                 headers['privatekey'] = privatekey;
                 headers['apikey'] = apikey;
                 var payment =   function (){
-                    return  fetch("https://cms.epayco.io/checkout/payment/session", {
+                    return  fetch("https://cms.epayco.co/checkout/payment/session", {
                         method: 'POST',
                         body: JSON.stringify(info),
                         headers
