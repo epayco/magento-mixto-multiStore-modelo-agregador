@@ -78,7 +78,7 @@ class Index extends Action implements CsrfAwareActionInterface
             $orderId = $request->getParam('order_id');
 
             $orderEpayco->setData('order', $orderId);
-            $orderEpayco->setData('retry', 5);
+            $orderEpayco->setData('retry', 1);
             $orderEpayco->setData('customer_id', $p_cust_id_cliente);
             $orderEpayco->setData('status', 'started');
             $orderEpayco->save();
