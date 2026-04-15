@@ -65,7 +65,7 @@ class OrderConsult extends Action
                 if($orderId && $refpayco){
                     //$order = $orderRepository->get($orderId);
                     $order = $objectManager->create('\Magento\Sales\Model\Order')->loadByAttribute('quote_id', (Integer)$orderId);
-                    $url = "http://eks-cms-backend-platforms-service.epayco.io/transaction/" .$refpayco;
+                    $url = "https://cms.epayco.co/transaction/" .$refpayco;
                     $curl->setOption(CURLOPT_FOLLOWLOCATION, true);
                     $curl->get($url);
                     $response = $curl->getBody();
